@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/dognose?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
+    username: ${MYSQL_USER:dognose}
+    password: ${MYSQL_PASSWORD:dognose1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  h2:
+    console:
+      enabled: false

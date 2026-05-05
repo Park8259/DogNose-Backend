@@ -1,0 +1,356 @@
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "seller@example.com",
+  "password": "password1234",
+  "name": "박성근",
+  "phone": "010-1234-5678",
+  "role": "SELLER"
+}
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "seller@example.com",
+  "password": "password1234"
+}
+
+###
+
+GET http://localhost:8080/api/users/me
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/dogs
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "name": "초코",
+  "breed": "푸들",
+  "gender": "MALE",
+  "birthDate": "2024-03-15",
+  "description": "사람을 좋아하고 활발한 강아지입니다.",
+  "profileImageUrl": "https://example.com/dogs/choco.jpg"
+}
+
+###
+
+GET http://localhost:8080/api/dogs/me
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/dogs/1
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/dogs/1/nose-prints
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "imageUrl": "https://example.com/nose/choco-nose.jpg",
+  "qualityScore": 87.50,
+  "vectorPointId": "nose-dog-1-reference",
+  "embeddingModel": "mock-s101_224",
+  "reference": true
+}
+
+###
+
+GET http://localhost:8080/api/dogs/1/nose-prints
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/files/images
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="choco-nose.jpg"
+Content-Type: image/jpeg
+
+< /Users/park/Downloads/choco-nose.jpg
+--boundary--
+
+###
+
+POST http://localhost:8080/api/dogs/1/verify
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "probeImageUrl": "/uploads/4ebc6e6e-57fb-4e5f-8bce-6f7cc04959dd.jpg",
+  "verificationType": "DELIVERY",
+  "threshold": 0.75
+}
+
+###
+
+GET http://localhost:8080/api/dogs/1/verification-logs
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/adoption-posts
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "dogId": 1,
+  "title": "비문 인증 완료된 푸들 초코 분양합니다",
+  "content": "사람을 좋아하고 건강한 아이입니다. 기준 비문 등록과 검증 로그가 있습니다.",
+  "price": 300000,
+  "region": "서울",
+  "adoptionReason": "개인 사정으로 좋은 가족을 찾고 있습니다.",
+  "contractTerms": "인도 시점에 비문 재검증 후 분양을 진행합니다."
+}
+
+###
+
+GET http://localhost:8080/api/adoption-posts
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/adoption-posts?region=서울
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/adoption-posts/1
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "buyer@example.com",
+  "password": "password1234",
+  "name": "입양희망자",
+  "phone": "010-2222-3333",
+  "role": "USER"
+}
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "buyer@example.com",
+  "password": "password1234"
+}
+
+###
+
+POST http://localhost:8080/api/adoption-posts/1/applications
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "message": "초코를 책임감 있게 돌보고 싶습니다. 방문 상담 가능할까요?"
+}
+
+###
+
+GET http://localhost:8080/api/applications/me
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/adoption-posts/1/applications
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/applications/1/accept
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/applications/1/reject
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/reservations
+Authorization: Bearer 여기에_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "applicationId": 1,
+  "reservedAt": "2026-06-01T14:00:00",
+  "place": "서울시 강남구 반려견 카페 앞"
+}
+
+###
+
+GET http://localhost:8080/api/reservations/me
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/reservations/1/confirm
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/reservations/1/cancel
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/reservations/1/complete
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/reservations/1/delivery/complete
+Authorization: Bearer 여기에_seller_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "probeImageUrl": "/uploads/4ebc6e6e-57fb-4e5f-8bce-6f7cc04959dd.jpg",
+  "threshold": 0.75
+}
+
+###
+
+POST http://localhost:8080/api/dogs/1/health-records
+Authorization: Bearer 여기에_seller_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "recordType": "CHECKUP",
+  "title": "기본 건강검진",
+  "description": "특이사항 없음",
+  "recordDate": "2026-05-01",
+  "attachmentUrl": "/uploads/health-check.jpg"
+}
+
+###
+
+GET http://localhost:8080/api/dogs/1/health-records
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/dogs/1/vaccinations
+Authorization: Bearer 여기에_seller_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "vaccineName": "종합백신",
+  "vaccinatedAt": "2026-04-20",
+  "nextDueAt": "2027-04-20",
+  "hospitalName": "서울동물병원",
+  "attachmentUrl": "/uploads/vaccination.jpg"
+}
+
+###
+
+GET http://localhost:8080/api/dogs/1/vaccinations
+Authorization: Bearer 여기에_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/reports
+Authorization: Bearer 여기에_buyer_or_seller_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "targetType": "POST",
+  "targetId": 1,
+  "reason": "허위 정보 의심",
+  "description": "게시글의 건강 정보가 실제 설명과 다릅니다."
+}
+
+###
+
+GET http://localhost:8080/api/reports/me
+Authorization: Bearer 여기에_buyer_or_seller_accessToken_붙여넣기
+
+###
+
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password1234",
+  "name": "관리자",
+  "phone": "010-9999-0000",
+  "role": "ADMIN"
+}
+
+###
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password1234"
+}
+
+###
+
+GET http://localhost:8080/api/admin/reports
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/admin/reports?status=OPEN
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/admin/reports/1
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "status": "RESOLVED",
+  "adminMemo": "게시글 내용을 확인하고 분양자에게 수정 안내 완료"
+}
+
+###
+
+GET http://localhost:8080/api/admin/adoption-posts
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/admin/adoption-posts?status=OPEN
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+
+###
+
+PATCH http://localhost:8080/api/admin/adoption-posts/1/status
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+Content-Type: application/json
+
+{
+  "status": "CLOSED"
+}
+
+###
+
+GET http://localhost:8080/api/admin/verification-logs
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
+
+###
+
+GET http://localhost:8080/api/admin/verification-logs?result=MATCH
+Authorization: Bearer 여기에_admin_accessToken_붙여넣기
