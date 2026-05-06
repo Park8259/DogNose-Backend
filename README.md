@@ -426,12 +426,37 @@ AI 서버가 이 계약만 맞춰주면 Spring Boot의 `verification_logs` 저�
 
 Qdrant는 비문 이미지 파일 자체가 아니라, AI 모델이 이미지에서 추출한 embedding vector를 저장하고 유사도 검색하는 벡터 DB입니다.
 
-현재 팀원 프로토타입은 `s101_224` 모델 기준으로 2048차원 embedding을 생성하므로 Qdrant 컬렉션은 아래 설정을 사용합니다.
+현재 기준 모델은 `s101_224`이며 2048차원 embedding을 사용합니다. Qdrant 컬렉션은 아래 설정을 기본값으로 사용합니다.
 
 ```text
 Collection: dog_nose_embeddings
 Vector size: 2048
 Distance: Cosine
+```
+
+모델 구성은 추론 서버 성능과 배포 난이도를 고려해서 아래 방향을 우선 검토합니다.
+
+```text
+1순위: s200 단일 모델
+2순위: s200 + s101 2개 모델 앙상블
+보류: 4개 모델 앙상블
+```
+
+4개 모델 앙상블은 정확도 개선 가능성이 있지만, 서버 메모리 사용량과 응답 시간이 커질 수 있습니다. 우선 `s200` 단일 모델로 전체 흐름을 완성하고, 정확도가 부족할 때 `s200 + s101` 조합으로 확장하는 방식을 권장합니다.
+
+Qdrant 수정 여부는 최종 모델의 embedding shape에 따라 결정합니다.
+
+```text
+Embedding shape: (N, 2048) -> 현재 Qdrant 설정 그대로 사용
+Embedding shape: (N, 다른값) -> Qdrant vector size 수정 필요
+```
+
+`s200 + s101` 앙상블을 사용할 경우에는 앙상블 방식에 따라 Qdrant 설계가 달라집니다.
+
+```text
+점수 평균 방식: 모델별 컬렉션을 따로 둘 수 있음
+벡터 결합 방식: 결합된 vector size로 컬렉션 재생성 필요
+s200 검색 + s101 재검증 방식: Qdrant는 s200 기준 vector size 사용
 ```
 
 Docker가 설치되어 있으면 Qdrant를 아래 명령으로 실행합니다.
