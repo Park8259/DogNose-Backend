@@ -1,0 +1,25 @@
+### Qdrant health check
+GET http://localhost:6333/
+
+
+### Create dog nose embedding collection
+PUT http://localhost:6333/collections/dog_nose_embeddings
+Content-Type: application/json
+
+{
+  "vectors": {
+    "size": 2048,
+    "distance": "Cosine"
+  }
+}
+
+
+### Check collection info
+GET http://localhost:6333/collections/dog_nose_embeddings
+
+
+### Insert a temporary 2048-dimensional test vector
+# 2048개 숫자가 필요해서 HTTP 파일에 직접 쓰기 어렵습니다.
+# 아래 스크립트로 더미 벡터 저장/검색을 확인하세요.
+#
+# python3 scripts/qdrant_demo.py

@@ -422,6 +422,54 @@ MATCH, NON_MATCH, UNCERTAIN, FAILED
 
 AI 서버가 이 계약만 맞춰주면 Spring Boot의 `verification_logs` 저장과 인도 완료 처리는 그대로 동작합니다.
 
+## Qdrant 벡터 DB
+
+Qdrant는 비문 이미지 파일 자체가 아니라, AI 모델이 이미지에서 추출한 embedding vector를 저장하고 유사도 검색하는 벡터 DB입니다.
+
+현재 팀원 프로토타입은 `s101_224` 모델 기준으로 2048차원 embedding을 생성하므로 Qdrant 컬렉션은 아래 설정을 사용합니다.
+
+```text
+Collection: dog_nose_embeddings
+Vector size: 2048
+Distance: Cosine
+```
+
+Docker가 설치되어 있으면 Qdrant를 아래 명령으로 실행합니다.
+
+```bash
+docker compose up -d qdrant
+```
+
+Qdrant 대시보드:
+
+```text
+http://localhost:6333/dashboard
+```
+
+Qdrant API:
+
+```text
+http://localhost:6333
+```
+
+IntelliJ HTTP Client에서는 `qdrant-test.http` 파일의 요청을 순서대로 실행하면 컬렉션 생성 여부를 확인할 수 있습니다.
+
+2048차원 더미 벡터 저장/검색까지 확인하려면 아래 스크립트를 실행합니다.
+
+```bash
+python3 scripts/qdrant_demo.py
+```
+
+실제 AI 서버가 완성되면 흐름은 아래처럼 연결합니다.
+
+```text
+이미지 업로드
+-> AI 서버가 이미지에서 2048차원 embedding 추출
+-> Qdrant dog_nose_embeddings 컬렉션에 저장
+-> 새 이미지 인증 시 Qdrant에서 유사한 비문 검색
+-> Spring Boot가 인증 결과와 로그 저장
+```
+
 ## 로컬 DB - H2
 
 처음에는 설치가 쉬운 H2 파일 DB를 사용합니다. DB 파일은 프로젝트의 `data` 폴더에 저장되므로 서버를 재시작해도 데이터가 유지됩니다.

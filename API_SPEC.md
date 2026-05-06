@@ -805,3 +805,52 @@ Response:
   "modelName": "s101_224"
 }
 ```
+
+## 17. Qdrant 벡터 DB 계약
+
+Qdrant는 Flutter 앱이 직접 호출하지 않습니다. Spring Boot 또는 AI 서버 내부에서만 사용합니다.
+
+컬렉션:
+
+```text
+dog_nose_embeddings
+```
+
+Vector 설정:
+
+```json
+{
+  "size": 2048,
+  "distance": "Cosine"
+}
+```
+
+Point payload 권장 구조:
+
+```json
+{
+  "dogId": 1,
+  "nosePrintId": 1,
+  "imageUrl": "/uploads/reference-nose.jpg",
+  "ownerId": 1,
+  "embeddingModel": "s101_224",
+  "reference": true
+}
+```
+
+예상 연결 흐름:
+
+```text
+비문 등록:
+Spring Boot 이미지 업로드
+-> AI 서버 embedding 추출
+-> Qdrant에 vector + payload 저장
+-> Spring Boot nosePrint.vectorPointId 저장
+
+비문 인증:
+Spring Boot 인증 요청
+-> AI 서버 probe image embedding 추출
+-> Qdrant 유사도 검색
+-> AI 서버가 MATCH/NON_MATCH와 similarity 반환
+-> Spring Boot verification_logs 저장
+```
